@@ -16,12 +16,23 @@ export const getUserThunk = createAsyncThunk(
   "user/getUser",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await API.getRandomUser();
+      const {
+        data: {
+          results: [
+            {
+              name: { first, last },
+              picture: { large },
+              dob: { age },
+            },
+          ],
+        },
+      } = await API.getRandomUser();
+
       return {
-        firstName: data.results[0].name.first,
-        lastName: data.results[0].name.last,
-        image: data.results[0].picture.large,
-        age: data.results[0].dob.age,
+        firstName: first,
+        lastName: last,
+        image: large,
+        age,
       };
     } catch (err) {
       return thunkAPI.rejectWithValue({ message: err.message });
