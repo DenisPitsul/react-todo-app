@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { isDateAfterYesterday } from "../utils/date";
 
 export const useTodos = (todos, query, done, overdue) => {
   const searchedTodos = useMemo(() => {
@@ -12,12 +13,12 @@ export const useTodos = (todos, query, done, overdue) => {
       filteredTodos = filteredTodos.filter((todo) => !todo.isDone);
 
     if (overdue === "overdue")
-      filteredTodos = filteredTodos.filter((todo) =>
-        Number(new Date() - new Date(todo.deadline) >= 0)
+      filteredTodos = filteredTodos.filter(
+        (todo) => !isDateAfterYesterday(new Date(todo.deadline))
       );
     else if (overdue === "notoverdue")
       filteredTodos = filteredTodos.filter((todo) =>
-        Number(new Date() - new Date(todo.deadline) < 0)
+        isDateAfterYesterday(new Date(todo.deadline))
       );
 
     filteredTodos = filteredTodos

@@ -1,26 +1,17 @@
+import { isAfter, subDays, startOfToday, addDays, format } from "date-fns";
+
 export const getDateStr = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return format(date, "yyyy-MM-dd");
 };
 
 export const getDatePlusDaysStr = (dayCount) => {
   const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + dayCount);
-  const year = tomorrow.getFullYear();
-  const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
-  const day = String(tomorrow.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  const futureDate = addDays(today, dayCount);
+  return format(futureDate, "yyyy-MM-dd");
 };
 
 export const isDateAfterYesterday = (date) => {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate());
-  today.setHours(0, 0, 0, 0);
-  yesterday.setHours(0, 0, 0, 0);
-
-  return new Date(date) > yesterday;
+  const today = startOfToday();
+  const yesterday = subDays(today, 0);
+  return isAfter(date, yesterday);
 };
